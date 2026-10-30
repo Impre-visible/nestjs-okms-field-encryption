@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Les champs sensibles sont chiffrés par CryptoService avant d'arriver ici.
+/// Un dump de cette table ne contient que des chiffrés (v1.<clé>.<iv>.<ct>.<tag>).
+model Client {
+  /// Généré côté appli (randomUUID) : il sert d'AAD, donc pas de @default
+  id       String  @id
+  /// En clair : nécessaire pour trier et afficher les listes
+  name     String
+  /// Chiffré
+  siret    String
+  /// Index aveugle HMAC du SIRET, pour la recherche exacte
+  siretIdx String  @unique
+  /// Chiffré
+  iban     String?
+  /// Chiffré
+  notes    String?
+}
