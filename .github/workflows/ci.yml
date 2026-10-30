@@ -32,4 +32,9 @@ jobs:
       - run: npm run generate
       - run: npx prisma db push
       - run: npm run typecheck
-      - run: npm test
+      - name: Tests
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test.log
+          echo "::notice title=Tests::$(grep -E '^# (tests|pass|fail|skipped)' test.log | tr '\n' ' ')"

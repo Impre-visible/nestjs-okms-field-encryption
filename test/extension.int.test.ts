@@ -8,6 +8,7 @@ import { after, before, beforeEach, describe, test } from "node:test";
 import { k1k2, k1Only } from "./helpers";
 
 const DATABASE_URL = process.env.DATABASE_URL;
+if (process.env.CI && !DATABASE_URL) throw new Error("DATABASE_URL requis en CI : les tests d'intégration ne doivent pas être sautés");
 
 describe("extension Prisma de chiffrement", { skip: !DATABASE_URL && "DATABASE_URL absent" }, () => {
   let mod: typeof import("../src/prisma/prisma.module");
